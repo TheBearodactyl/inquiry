@@ -33,18 +33,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9555578bc9e57714c812a1f84e4fc5b4d21fcb063490c624de019f7464c91268"
 
 [[package]]
-name = "choice"
-version = "0.1.0"
-dependencies = [
- "inquire",
- "proc-macro2",
- "quote",
- "serde",
- "serde_json",
- "syn",
-]
-
-[[package]]
 name = "crossterm"
 version = "0.25.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -108,6 +96,18 @@ dependencies = [
  "once_cell",
  "unicode-segmentation",
  "unicode-width",
+]
+
+[[package]]
+name = "inquiry"
+version = "0.1.0"
+dependencies = [
+ "inquire",
+ "proc-macro2",
+ "quote",
+ "serde",
+ "serde_json",
+ "syn",
 ]
 
 [[package]]
