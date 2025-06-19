@@ -1,5 +1,5 @@
 [package]
-name = "choice"
+name = "inquiry"
 version = "0.1.0"
 license = "MIT"
 description = "A utility macro for the inquire crate"
