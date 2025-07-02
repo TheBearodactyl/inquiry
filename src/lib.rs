@@ -13,7 +13,7 @@ pub fn derive_choice(input: TokenStream) -> TokenStream {
 
     let variant_matches = variants.iter().map(|variant| {
         let variant_name = &variant.ident;
-        let desc = get_description(variant)
+        let desc = get_doc_comment(variant)
             .unwrap_or_else(|| panic!("Missing description for variant {}", variant_name));
 
         quote! {
@@ -77,24 +77,36 @@ pub fn derive_choice(input: TokenStream) -> TokenStream {
     TokenStream::from(expanded)
 }
 
-fn get_description(variant: &Variant) -> Option<String> {
-    variant.attrs.iter().find_map(|attr| {
-        if attr.path().is_ident("desc") {
-            let mut description = None;
-            attr.parse_nested_meta(|meta| {
-                if meta.path.is_ident("text") {
-                    let value = meta.value()?;
-                    let lit: syn::LitStr = value.parse()?;
-                    description = Some(lit.value());
-                    Ok(())
-                } else {
-                    Err(meta.error("expected `text`"))
-                }
-            })
-            .ok()?;
-            description
-        } else {
-            None
-        }
-    })
+fn get_doc_comment(variant: &Variant) -> Option<String> {
+    let mut lines: Vec<_> = variant
+        .attrs
+        .iter()
+        .filter(|attr| attr.path().is_ident("doc"))
+        .filter_map(|attr| match &attr.meta {
+            syn::Meta::NameValue(syn::MetaNameValue {
+                value:
+                    syn::Expr::Lit(syn::ExprLit {
+                        lit: syn::Lit::Str(s),
+                        ..
+                    }),
+                ..
+            }) => Some(s.value()),
+            _ => None,
+        })
+        .skip_while(|s| s.trim().is_empty())
+        .flat_map(|s| {
+            s.split('\n')
+                .map(|s| {
+                    let s = s.strip_prefix(' ').unwrap_or(s);
+                    s.to_owned()
+                })
+                .collect::<Vec<_>>()
+        })
+        .collect();
+
+    while let Some(true) = lines.last().map(|s| s.trim().is_empty()) {
+        lines.pop();
+    }
+
+    Some(lines.concat())
 }
