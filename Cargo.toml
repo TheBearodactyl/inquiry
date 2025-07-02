@@ -1,6 +1,6 @@
 [package]
 name = "inquiry"
-version = "0.1.3"
+version = "0.1.4"
 license = "MIT"
 description = "A utility macro for the inquire crate"
 homepage = "https://github.com/thebearodactyl/inquiry"
