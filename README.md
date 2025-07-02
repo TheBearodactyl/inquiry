@@ -1,10 +1,12 @@
+# Inquiry - Create menus out of enumerations with the power of `inquire`
+
 ```rs
 #[derive(Debug, Copy, Clone, Choice)]
 enum ExampleChoice {
-  #[desc(text = "Description of choice #1")]
+  /// Description of choice 1
   ChoiceOne,
 
-  #[desc(text = "Description of choice #2")]
+  /// Description of choice 2
   ChoiceTwo,
 }
 
